@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="a6" />
+		<Option pch_mode="2" />
+		<Option compiler="ow" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\a6" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="ow" />
+				<Compiler>
+					<Add option="-d2" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\a6" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="ow" />
+				<Compiler>
+					<Add option="-ot" />
+					<Add option="-ox" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-wx" />
+			<Add option="-xs" />
+		</Compiler>
+		<Unit filename="..\AsmFile.cpp" />
+		<Unit filename="..\AsmFile.h" />
+		<Unit filename="..\Charset.cpp" />
+		<Unit filename="..\Charset.h" />
+		<Unit filename="..\Config.h" />
+		<Unit filename="..\Cpu.h" />
+		<Unit filename="..\Directive.cpp" />
+		<Unit filename="..\Directive.h" />
+		<Unit filename="..\Error.cpp" />
+		<Unit filename="..\Error.h" />
+		<Unit filename="..\Expression.cpp" />
+		<Unit filename="..\Expression.h" />
+		<Unit filename="..\Global.cpp" />
+		<Unit filename="..\Global.h" />
+		<Unit filename="..\Label.h" />
+		<Unit filename="..\Main.cpp" />
+		<Unit filename="..\Main.h" />
+		<Unit filename="..\OutputCbm.cpp" />
+		<Unit filename="..\OutputCbm.h" />
+		<Unit filename="..\OutputFactory.cpp" />
+		<Unit filename="..\OutputFactory.h" />
+		<Unit filename="..\OutputHex.cpp" />
+		<Unit filename="..\OutputHex.h" />
+		<Unit filename="..\String.cpp" />
+		<Unit filename="..\String.h" />
+		<Unit filename="..\Text.cpp" />
+		<Unit filename="..\Text.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

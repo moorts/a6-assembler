@@ -1,0 +1,1709 @@
+<html><head><title>A6 - portable cross assembler</title>
+<style type="text/css">
+<!--
+    body, td, tr, th {
+        font-family: "Free Serif", Baskerville, "Times New Roman", serif;
+        font-size: 14px;
+        color:#000000;
+        background-color:#ffffff;
+    }
+    h1 {
+        font-family: "Free Sans", "Gill Sans", Helvetica, Verdana, sans-serif;
+        font-size: 24px;
+    }
+	h2 {
+        font-family: "Free Sans", "Gill Sans", Helvetica, Verdana, sans-serif;
+        font-size: 18px;
+	}
+	blockquote {
+		font-style: oblique;
+	}
+-->
+</style>
+<body>
+<h1 align="center">A6</h1>
+	<p>Open source cross-assembler</p>
+	<p>Version 0.5.0b1 (Ignatz)</p>
+	<p>Copyright &copy; 1997 - 2006 Simon Collis</p>
+	<p>Permission is granted to copy, distribute and/or modify this document under
+	the terms of the GNU Free Documentation License, Version 1.2 or any later
+	version published by the Free Software Foundation; with no Invariant Sections,
+	no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is
+	included in the section entitled "<a href="#gfdl">GNU Free Documentation
+	License</a>".
+
+<hr>
+<h1 align="center">Table of contents</h1>
+	<ul>
+		<li><a href="#intr">Introduction</a><br>
+		<li><a href="#get">Obtaining A6</a><br>
+		<li><a href="#comp">Compiling A6</a><br>
+		<li><a href="#files">Files</a><br>
+		<li><a href="#cmdline">Command-line options</a><br>
+		<li><a href="#srcform">Source file format</a><br>
+		<li><a href="#expr">Expressions</a><br>
+		<li><a href="#dir">Assembler directives</a><br>
+		<li><a href="#char_a6_format">Character set formats</a><br>
+		<li><a href="#errors">Error messages</a><br>
+		<li><a href="#">Roadmap</a><br>
+		<li><a href="#">Thanks and Acknowledgements</a><br>
+		<li><a href="#gfdl">GNU Free Documentation License</a><br>
+		<li><a href="#index">Index</a><br>
+	</ul>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="intr"></a>
+<h1>Introduction</h1>
+
+	<blockquote>"This is in a way,<br>
+	A prologue,<br>
+	A prelude,<br>
+	A preface, whatever you will - <br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	write your own ticket."</blockquote>
+
+	<p>A6 was originally written to be a cross-assembler only to write code
+	for the Commodore 64/128 microcomputers.  The original distributions were
+	binary only, for MS-DOS, and eventually Amiga and Linux as well.</p>
+
+	<p>Starting with version 0.4.3, <i>a6</i> has been released as source code
+	under the GNU General Public Licence.  Version 0.4.3 and was developed
+	using <a href="http://www.kdevelop.org/">kdevelop</a>.  Binary
+	distributions continued.</p>
+
+	<p>Starting with version 0.5.0b1, <i>a6</i> will primarily be developed
+	using OpenWatcom (currently version 1.4).  This manual, written in HTML,
+	will be the primary source of documentation.</p>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="get"></a>
+<h1>Obtaining A6</h1>
+
+	<p>The latest version of A6 can always be obtained from Sourceforge at
+	<a href="http://asix.sourceforge.net/">http://asix.sourceforge.net/</a>.</p>
+
+	<p>Versions of A6 from 0.4.4 onwards are named like this:</p>
+
+<pre>    a6-1.2.3beta4.tar.gz</pre>
+
+	<p>That example file name would refer to <i>a6</i> version 1.2.3, beta
+	version 4, source code release.</p>
+
+	<p>Binary distributions of <i>a6</i> will be held in files named like
+	this:</p>
+
+<pre>    a6-0.5.0beta1-os2.zip</pre>
+
+	<p>Where the letters "os2" can be replaced by "win32", "dos", "beos",
+	"minix", etc, depending on the port.</pre>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="comp"></a>
+<h1>Compiling A6</h1>
+
+<a name="comp_windows"></a>
+<h2>Windows</h2>
+
+	<p>As Open Watcom is used as the primary development platform for the
+	<i>a6</i> project, it is recommended to use this compiler.  Open Watcom
+	can be downloaded from
+	<a href="http://www.openwatcom.org/">http://www.openwatcom.org/</a>.</p>
+
+	<p>The project can be found in the source distribution in
+	<i>/watcom/a6-win32.wpj</i>.</p>
+
+	<p>MinGW can also be used; see
+	<a href="http://www.mingw.org/">http://www.mingw.org/</a>.  MinGW should
+	work with the existing makefile without any changes being required.
+	(I prefer to use the distribution bundled in with
+	<a href="http://www.bloodshed.org">Bloodshed Dev-C++</a> personally.)</p>
+
+<a href="comp_dos"></a>
+<h2>DOS</h2>
+
+	<p>As DOS is supported by Open Watcom, Open Watcom is recommended for this
+	platform.  The project can be found in <i>/watcom/a6-dos.wpj</i>.</p>
+
+	<p>DJGPP should also work, as the standard <i>makefile</i> is intended for use
+	with GCC, but I haven't tested this.</p>
+
+<a href="comp_os2"></a>
+<h2>OS/2</h2>
+
+	<p>As OS/2 is supported by Open Watcom, Open Watcom is recommended for this
+	platform.  (If you intend to modify <i>a6</i>, please note that relative
+	directories are used for this project; it shouldn't be a problem with
+	existing files, but as of Open Watcom 1.3, files in relative directories
+	have absolute, rather than relative, file names when added into projects
+	when using OS/2 as the host system.  Whether this still holds for version
+	1.4 I haven't been able to verify.)</p>
+
+	<p>The project can be found in <i>/watcom/a6-os2.wpj</i>.</p>
+
+	<p>EMX should be usable, as the included makefile is tuned for gcc.</p>
+
+<a name="comp_linux"></a>
+<h2>Linux</h2>
+
+	<p>The makefile supplied in the a6 root directory should be ready to go, as
+	it is designed for use with GCC.  The standard "make" should (in theory) do
+	everything.</p>
+
+<a name="comp_minix"></a>
+<h2>Minix</h2>
+
+	<p>Untested, but the GCC makefile should work fine.  In theory, a change of
+	compiler name should allow use of the ACK, but I haven't tested this
+	either.</p>
+
+<a name="comp_unix"></a>
+<h2>Other Unix</h2>
+
+	<p>Other Unix will require adjusting of the makefile for their respective
+	compilers.  I have deliberately kept the makefile very simple in order to
+	keep this simple.</p>
+
+<a href="comp_amiga"></a>
+<h2>Amiga</h2>
+
+	<p>As I no longer have a working Amiga configuration, you will need to edit
+	the makefile by hand.  It should be pretty trivial (I hope).</p>
+
+	<p>Please contribute back any working makefile that you make.</p>
+
+<a href="comp_beos"></a>
+<h2>BeOS</h2>
+
+	<p>Untested.  Any volunteers?</p>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="files"></a>
+<h1>Files</h1>
+
+<a name="a6_exe"></a>
+<h2>a6 / a6.exe</h2>
+
+	<p>The main executable. This position may differ for other platforms, such
+	as MS-DOS (where <i>a6</i> will be in its own directory), and AmigaDOS
+	(where it will probably be in the C: directory).</p>
+
+<a name="a6c_where"></a>
+<h2>*.a6c</h2>
+
+	<p>Each <i>a6c</i> file defines the available opcodes for the CPU.  They
+	are loaded by the <b>.cpu</b> directive (qv).</p>
+
+	<p><i>A6C</i> files are searched for in a set of directories, as
+	follows:</p>
+
+	<ol>
+		<li>the current directory,<br>
+		<li>any directory pointed to by (if defined) the environment variable
+			<i>A6PATH</i>,
+		<li>the predefined directory listed in <i>cnf.h</i> (C:\A6 on Windows,
+			OS/2 and DOS based systems, C:A6 on the Amiga and /usr/share/a6
+			otherwise).
+	</ol>
+
+<a name="char_a6"></a>
+<h2>char.a6</h2>
+
+	<p>This file contains the RFC-1345 format character mnemonics for the
+	characters for each character set.</p>
+
+	<p>It is searched for in the same way as <i>.a6c</i> files.</p>
+
+	<p>See the section on <a href="#char_a6_format">character set formats</a>
+	later in this manual for more details.</p>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="cmdline"></a>
+<h1>Command Line options</h1>
+
+	<p>All command line switches come in "short" and "long" flavours; both are
+	listed below.  A solidus ("/") is used to separate variants of each
+	option.</p>
+
+	<p>Note that options are case sensitive, and should be entered in lower
+	case.<p>
+
+<a name="cmd_d"></a>
+<h2>-d / --dots-optional</h2>
+
+	<p>Note: for debugging reasons this option is disabled in 0.5.0beta1.</p>
+
+	<p>The <i>-d</i> option makes the dots on assembler directives optional.
+	Thus <i>.include</i> can be rendered in the file as <i>include</i>. Slows
+	the processing down somewhat, and is not recommended for new source files,
+	and is really only included to allow assembly of files created for Thomas
+	Lehmann's <i>AS65</i> assembler. Once the new source converter is ready,
+	this option will be dropped altogether.</p>
+
+<a name="cmd_f0"></a>
+<h2>-f0 / --format-p00</h2>
+
+	<p>Generates the output file in P00 format, as used by the <i>PC64</i>
+	emulator (and others).  Uses the name of the main assembly file for the
+	name of the file in the P00 header, and mangles the name into an
+	8-character short name for the filename.</p>
+
+<a name="cmd_fb"></a>
+<h2>-fb / --format-bin</h2>
+
+	<p>Generates the output file in raw binary format.  This is the default
+	output format.</p>
+
+<a name="cmd_fp"></a>
+<h2>-fp / --format-prg</h2>
+
+	<p>Generates the output file in Commodore binary format. The load address
+	(the first <i>.org</i> or <i>*=</i> in the source tree) is the first two
+	bytes of the file (LSB first), followed by a straight binary dump of the
+	object code.</p>
+
+<a name="cmd_o"></a>
+<h2>-o &lt;filename&gt; / --output &lt;filename&gt;</h2>
+
+	<p>Specifies the name of the output file. The default is the name of the
+	input file, with an appropriate extension (such as <i>.obj</i>,
+	<i>.p00</i>, <i>.prg</i>, etc.)</p>
+
+	<p>Note that there is a space between the option and the filename.</p>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="srcformat"></a>
+<h1>Source file format</h1>
+
+	<p><i>A6</i> was originally based on the classic <i>Turbo Assembler</i>
+	and <i>Laser Genius</i> assemblers for the Commodore 64, which in turn
+	were very influenced by classic DEC assemblers, so the syntax should be
+	fairly familiar to anyone who has used these assemblers in the past.</p>
+
+	<p>One of the fundamental design goals of <i>a6</i> is that <i>Laser
+	Genius</i> source code should be able to be assembled unmodified, while
+	<i>Turbo Assembler</i> source code may only require a "search and replace"
+	to remove any spaces in assembly labels.</p>
+
+	<p>However, given that the capability even of an XT running Minix is far
+	ahead of any C64-based assembler, <i>a6</i> takes advantage of this to add
+	substantial extensions to the facility to accommodote functionality present
+	in other popular assembler programs.</p>
+
+	<p><i>a6</i> follows the usual line-based assembly model, and treats each
+	line as a separate entity.  There are several patterns a line can
+	follow:</p>
+
+<pre>    label
+    label           =       *</pre>
+
+	<p>These two lines are equivalent, and defines the specified label to be
+	equivalent to the current assembly position.</p>
+
+	<p>Any "movement" of object code will cause a "label defined twice"
+	error.</p>
+
+<pre>    label           =       5
+    label           .equ    5</pre>
+
+	<p>Both of these two lines do the same thing; they define a constant called
+	label, and set it equal to 5.  Note that <i>a6</i> only supports numeric
+	constants and variables.</p>
+
+<pre>    label           :=      5</pre>
+
+	<p>Here we're defining label to be a variable.  You can redefine a variable
+	as many times as you like, but you must always use the ":=" operator to
+	change its value.</p>
+
+<pre>    label           lda     #0</pre>
+
+	<p>Here we've followed a position definition with some code.  It's the same
+	as doing this on two lines:
+
+<pre>    label
+                    lda     #0</pre>
+
+	<p>The final line form is that second one above: note that if you're not
+	defining a label, the white space is mandatory.</p>
+
+	<p>Naturally, we can call assembly directives:</p>
+
+	<pre>    label           .byt    1, 2, 3, 4</pre>
+
+	<p>And, of course, we can add comments in anywhere.  Comments always extend
+	to the end of the line:</p>
+
+	<pre>    label           .byt    1, 2    //,3, 4 - don't need these any more</pre>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="expr"></a>
+<h1>Expressions</h1>
+
+	<p>Expressions in <i>a6</i> are evaluated strictly left to right, without
+	any operator precedence.  No parentheses are allowed within an
+	expression.</p>
+
+	<p>This means that it doesn't always do what you expect:</p>
+
+	<pre>    2 + 3 > 4</pre>
+
+	<p>produces 1, whereas you'd probably expect (in <i>C</i> or <i>BASIC</i>),
+	to get back 2 (which would be the result of 2 + (3 > 4), of course).  Be
+	warned: this is easier a trap to fall into than you'd think.</p>
+
+	<p>In <i>a6</i>, logical expressions return 0 for false and 1 for true, in
+	the same way as <i>C</i>.  This is to ensure that true values can be put
+	into the shortest possible address space.  However, it may cause
+	incompatibility with some programs written to target other assemblers, so
+	be warned!</p>
+
+<h2>List of operators</h2>
+
+	<table border=1>
+		<tr><th colspan=2>Arithmetic operators
+		<tr><td>+			<td>addition
+		<tr><td>-			<td>subtraction
+		<tr><td>*			<td>multiplication
+		<tr><td>/			<td>division
+		<tr><td>%			<td>remainder (e.g. 7 % 3 returns 1)
+
+		<tr><th colspan=2>Shift operators
+		<tr><td>&lt;&lt;	<td>left shift (e.g. 3 << 2 returns 12)
+		<tr><td>&gt;&gt;	<td>right shift (e.g. 16 >> 2 returns 4)
+		
+		<tr><th colspan=2>Comparison and logical operators
+		<tr><td>&lt;		<td>less than (e.g. 2 < 3 returns 1)
+		<tr><td>&gt;		<td>greater than (e.g. 2 > returns 0)
+		<tr><td>!=,
+				&lt;&gt;,
+				&gt;&lt;<br><td>not equal to (e.g. 2 != 3 returns 1)
+		<tr><td>??, ^^		<td>logical exclusive-OR
+		<tr><td>&amp;&amp;	<td>logical AND
+		<tr><td>||			<td>logical OR
+
+		<tr><th colspan=2>Bitwise operators
+		<tr><td>?, ^		<td>bitwise exclusive-OR
+		<tr><td>&amp;		<td>bitwise AND
+		<tr><td>|			<td>bitwise OR
+		
+		<tr><th colspan=2>Other
+		<tr><td>[<i>label</i>]	<td>returns 1 if the specified label is defined		
+	</table>
+
+	<p>Note that the [] construct makes life a little easier in conditional
+	assembly - the single line:</p>
+
+<pre>        .if             [this] && [that]</pre></pre>
+
+	<p>is equivalent to the following two:</p>
+
+<pre>        .ifdef          this
+        .ifdef          that</pre>
+
+	<p>Incidentally, it's worth noting that the reason <i>a6</i> doesn't have
+	<i>.ifdef</i> or <i>.ifndef</i> assembler directives is because of the [x]
+	construct.</p>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="dir"></a>
+<h1>Assembler Directives</h1>
+
+	<p>Directives are entered into the source stream directly, in place of an
+	opcode (hence they are often known as "pseudo-ops").</p>
+
+	<p>This list is in alphabetical order.  Numbers in brackets indicate the
+	version of <i>a6</i> in which they first appeared.</p>
+
+	<p>Many directives have synonyms, and these are usually for compatability
+	or brevity.</p>
+
+<a name="d_add"></a>
+<h2>.add &lt;expression&gt;</h2>
+
+	<p>Specifies a byte to add to all outgoing bytes (overflows being ignored).
+	This has its uses in, say, providing some slight protection, or perhaps
+	just "encrypting" the string section of an adventure game...</p>
+
+	<p>If you use this in conjunction with <i>.eor</i>, remember that
+	<i>.add</i> is done first, then <i>.eor</i>.</p>
+
+<a name="d_align"></a>
+<h2>.align &lt;expression&gt;</h2>
+
+	<p>Aligns the program counter (*) to a specified boundary; thus</p>
+
+<pre>    .align 3</pre>
+
+	<p>will output <i>NOP</i> instructions until the expression (* & 3) equates
+	to zero.</p>
+
+	<p><i>.align</i> without any arguments, or with a zero argument, aligns to
+	a 256-byte boundary.  In other words, if you don't want to align at all,
+	you'll need to use a <i>.if</i> statement to do it, rather than any relying
+	on the expression "evaluating away" the alignment.</p>
+
+	<p>Note that this has absolutely nothing to do with the alignment of an
+	expression onto, say, a 4-byte boundary, as that is defined by the
+	<i>a6c</i> file.</p>
+
+<a name="d_block"></a>
+<h2>.block &lt;expression&gt;</h2>
+
+	<p><b>Synonym:</b> .pad</p>
+
+	<p>Inserts a block of <i>NOP</i> instructions into the output file.</p>
+
+	<p>In original <i>Laser Genius</i> specifications, <i>.block</i> only does
+	this when outputting to memory; it actually skips when creating a hex file.
+	<i>a6</i> doesn't do this yet, so it always puts NOPs in; the two
+	directives may split when I add hex support.</p>
+
+<a name="d_byte"></a>
+<h2>.byte &lt;expression&gt;[, &lt;expression&gt;] (0.1)</h2>
+
+	<p><b>Synonyms</b>: .byt, .txt</p>
+
+	<p>Puts 8-bit bytes into the output stream.  You can specify as many bytes
+	as you want (space permitting), delimited with commas.</p>
+
+	<p><i>.byte</i> also accepts characters (which are rendered using the
+	current character set, see <i>.cset</i> for more details).</p>
+
+	<p>You can mix arguments with impunity, just be sure that they all produce
+	values no longer than 8 bits.</p>
+
+	<p><i>A6</i> presumes any value less than zero is two's complement signed;
+	therefore the valid range is -128 to 255.  (Note that this will only work
+	when assembling on a host which uses two's complement itself).</p>
+
+<a name="d_cpu"></a>
+<h2>.cpu &lt;cpu-name&gt; (0.4.4)</h2>
+
+	<p>Loads a CPU opcode table directly from disk.</p>
+
+	<p>The name of the file is that of the cpu, with ".a6c" appended; thus the
+	file for the 6510 processor is "6510.a6c".  These files are searched for in
+	the current directory, then in any directory specified in the environment
+	variable <i>A6PATH</i>, then the directory specified in the source file
+	<i>cnf.h</i>.</p>
+
+	<p>The format of <i>a6c</i> files is discussed in a later section of this
+	manual.</p>
+
+	<p>Note that a lot of errors are "recycled", and have somewhat different
+	meanings when encountered while loading an <i>a6c</i> file.</p>
+
+<a name="d_cset"></a>
+<h2>.cset &lt;name&gt;</h2>
+
+	<p>Loads a character set for the target machine.  Text characters are
+	parsed accordingly.  The standards are as follows:</p>
+
+<pre>    ascii       standard ASCII character set
+    host        don't do any conversion at all
+    scrl        Commodore 64 lower case
+    scru        Commodore 64 upper case
+    petscii     Commodore's flavour of ASCII</pre>
+
+	<p>Previous versions of <i>a6</i> didn't do any conversion if you said
+	<i>.cset ascii</i>; nowadays, it does.  To avoid any character processing,
+	use <i>.cset host</i> instead.</p>
+
+	<p>See the section on <i>character sets</i> later for more details.</p>
+
+<a name="d_echo"></a>
+<h2>.echo &lt;text&gt;</h2>
+
+	<p>A simple parrot that can be used to display messages to the screen.</p>
+
+	<p>The theory has always been that this will one day get a bit more
+	intelligent, so that you can print out label &amp; variable values, etc, so
+	I'd advise putting things in quotes for now (although you will see the
+	quotes when the printout occurs).</p>
+
+<a name="d_else"></a>
+<h2>.else</h2>
+
+	<p>Reverses the current assembly condition; e.g.</p>
+
+<pre>        .if [this]
+        jmp this
+        .else
+        .echo "This wasn't defined"
+        .fi</pre>
+
+	<p>will print a warning if the label wasn't defined, instead of inserting a
+	jump instruction.</p>
+
+<a name="d_fi"></a>
+<h2>.endif</h2>
+
+	<p><b>Synonyms</b>: .fi, .ifend</p>
+
+	<p>Ends the current conditional assembly block.</p>
+
+<a name="d_endloc"></a>
+<h2>.endloc</h2>
+
+	<p><b>Synonym</b>: .lacol</p>
+
+	<p>Ends the current local variable block.</p>
+
+<a name="d_eor"></a>
+<h2>.eor &lt;expression&gt;</h2>
+
+	<p>Will use a single byte to exclusive-OR any output with before it goes to
+	the output stream.</p>
+
+	<p>If you use this in conjunction with <i>.eor</i>, remember that
+	<i>.add</i> is done first, then <i>.eor</i>.</p>
+
+<a name="d_equ"></a>
+<h2>&lt;label&gt; .equ &lt;expression&gt;</h2>
+
+	<p>A synonym for using the equality operator to define a label.  Used for
+	compatability with some other assemblers.</p>
+
+	<p>There is no equivalent directive to assign a variable, incidentally.</p>
+
+<a name="d_file"></a>
+<h2>.file &lt;filename&gt;</h2>
+
+	<p>Passes control to the named file.  Essentially, a <i>.include</i> that
+	does not return.</p>
+
+<a name="d_if"></a>
+<h2>.if &lt;expression&gt;</h2>
+
+	<p><b>Synonym</b>: .ifneq</p>
+
+	<p>Begins a block of conditional assembly.</p>
+
+	<p>If the result of the expression is non-zero, the next block of code is
+	assembled.  If not, it is skipped.</p>
+
+	<p>Note that if you do some forward-referencing with a variable, you might
+	find that "program counter shift" occurs, and lots of label redefinition
+	errors occur.</p>
+
+<a name="d_ifequ"></a>
+<h2>.ifequ &lt;expression&gt;</h2>
+
+	<p>Similar to <i>.if</i>, although the assembly of the next block continues
+	if the result of the expression is zero, otherwise the block is
+	skipped.</p>
+
+<a name="d_ifeven"></a>
+<h2>.ifeven &lt;expression&gt;</h2>
+
+	<p>Continues assembly of the next block if the result of the expression is
+	even, and skips if odd.</p>
+
+	<p>For example, the line:</p>
+
+<pre>        .ifeven var1</pre>
+
+	<p>is equivalent to</p>
+
+<pre>        .if var1 & 1</pre>
+
+<a name="d_ifmi"></a>
+<h2>.ifmi &lt;expression&gt;</h2>
+
+	<p><b>Synonym</b>: .ifneg</p>
+
+	<p>Continues assembly if the result of the expression is less than
+	zero.</p>
+
+	<p>Note that this is calculated according to the host machine's sign
+	rules;</p>
+
+<pre>        .if var1 & 0x80</pre>
+
+	<p><i>might</i> do the same as</p>
+
+<pre>        .ifmi var1</pre>
+
+	<p>but</p>
+
+<pre>        .if var1 < 0</pre>
+
+	<p>will do.</p>
+
+<a name="d_ifodd"></a>
+<h2>.ifodd &lt;expression&gt;</h2>
+
+	<p>Continues assembly of the next block if the result of the expression is
+	odd, and skips if even.</p>
+
+	<p>For example, the line:</p>
+
+<pre>        .ifodd var1</pre>
+
+	<p>is equivalent to</p>
+
+<pre>        .if var1 & 1 = 0</pre>
+
+<a name="d_ifpl"></a>
+<h2>.ifpl &lt;expression&gt;</h2>
+
+	<p><b>Synonym</b>: .ifpos</p>
+
+	<p>Continues assembly of the next block if the result of the expression is
+	greater than zero, and skips otherwise.  Note that it treats its arguments
+	as signed at host word length; thus 0x8000 is likely to be positive on a
+	32-bit architecture, and probably not on a 16-bit architecture.</p>
+
+<a name="d_incbin"></a>
+<h2>.incbin &lt;filename&gt;</h2>
+
+	<p><b>Synonym</b>: .ibin</p>
+
+	<p>Includes a binary file directly into the output stream.  No parsing is
+	done of the file.</p>
+
+<a name="d_inc"></a>
+<h2>.include &lt;filename&gt;</h2>
+
+	<p><b>Synonyms</b>: .inc, .lib</p>
+
+	<p>Includes a file into the source tree.  Differs from <i>.file</i> in that
+	when assembly of the included file is completed, control returns to the
+	line of the original file following the <i>.inc</i>.</p>
+
+	<p>The current limit is 32 levels of nesting; this may change later.</p>
+
+<a name="d_incp00"></a>
+<h2>.incp00 &lt;filename&gt;</h2>
+
+	<p><b>Synonym</b>: .ip00</p>
+
+	<p>Includes a PC64 emulator file directly into the output stream.</p>
+
+	<p>This is done by discarding the PC64 header, and the first two bytes of
+	the file, and then including the rest.</p>
+
+<a name="d_incprg"></a>
+<h2>.incprg &lt;filename&gt;</h2>
+
+	<p><b>Synonym</b>: .iprg</p>
+
+	<p>Includes a Commodore program file directly into the output stream.</p>
+
+	<p>This is done by discarding the first two bytes of the file, and then
+	including the rest.</p>
+
+<a name="d_local"></a>
+<h2>.local</h2>
+
+	<p>Enters a local scope block.</p>
+
+	<p>Inside a local block, any label or variable definitions occur to the
+	locally named versions.  To use the global label definition when in a
+	local block, you can prefix the label with two colons.  For example:</p>
+
+<pre>    lbl1   :=     4
+           .local
+           .byte  lbl1    // This produces a 3
+    lbl1   :=     4
+           .byte  lbl1    // This produces a 4
+           .byte ::lbl1   // This produces a 3 again
+           .endloc
+           .byte  lbl1    // This produces a 3 again.
+</pre>
+
+<a name="d_long"></a>
+<h2>.long &lt;expression&gt;</h2>
+
+	<p>Includes 32-bit signed or unsigned words into the output stream,
+	according to the target processor endianism; thus on little-endian
+	architectures the line</p>
+	
+<pre>        .long $12345678</pre>
+
+	<p>would produce the bytes $78, $56, $34 and $12, in that order.  Whereas
+	on a big-endian architecture, it would produce $12, $34, $56 and $78.</p>
+
+	<p>As usual, <i>a6</i> is happy to accept arguments either signed or
+	unsigned; it's up to your program whether they're treated as signed or
+	not.</p>
+
+<a name="d_noundoc"></a>
+<h2>.noundoc</h2>
+
+	<p>Turns off support for undocumented opcodes on the current processor.</p.
+
+	<p>Because undocumented opcodes are generally unsupported, their
+	reliability and usage may vary.</p>
+
+<a name="d_null"></a>
+<h2>.null &lt;string&gt;</h2>
+
+	<p>Similar to <i>.byte</i>, but terminates each string with a NUL
+	character, according to the current character set.</p>
+
+	<p>Strings can be delimited with commas.</p>
+
+<a name="d_org"></a>
+<h2>.org &lt;expression&gt;</h2>
+
+
+
+.TP
+.B .ver <expression> (0.4.3)
+Warns the user if the version number of
+.I a6
+is not up to date, and quits if the minor version has changed.  You can
+specify the version in decimal: 10203 would require version 1.2.3 to assemble
+correctly.
+.TP
+.B .word <expression>[,<expression>] (0.1)
+Puts 16-bit words into the output stream, using the current CPU endian system.
+You can specify as many words as you want (space permitting).
+.SH ENVIRONMENT
+.TP
+.B A6_INCPATH
+The path to be searched for include files, if they are not in the current
+directory. On Unix systems, this is separated by colons `:'; on all other
+systems (at present), use a semi-colon `;'.
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="char_a6_format"></a>
+<h1>Character set formats</h1>
+
+	<p>Character set formats are stored in the file <i>char.a6</i>.</p>
+	
+	<p>Character mnemonics, which are based on RFC 1345, can be up to four
+	characters long.  All mnemonics that are specific to <i>a6</i> (some of
+	which actually trigger "special-case" bits of code) begin with an
+	asterisk.</p>
+	
+	<p>If RFC 1345 contains no mnemonic, I have used the full Unicode
+	character.  If no Unicode character exists, I have devised a mnemonic
+	beginning with an asterisk, as follows:</p>
+	
+	<table border=1>
+		<tr><th>*F		<td>figures mode (used for teletype character sets)
+		<tr><th>*L		<td>letters mode (used for teletype character sets)
+	</table>
+
+	<p>Teletype character sets should be specified in three parts, in this
+	order:</p>
+
+	<ol>
+		<li>Common set.  In this set, specify all characters that are common to
+			both figures and letters mode.<br>
+		<li>Letters set.  In this set, specify all characters that are unique
+			to the letters set.<br>
+		<li>Figures set.  In this set, specify all characters that are unique
+			to the figures set.<br>
+	</ul>
+
+	<p>Note that what I have termed the "letters" set should be the default
+	set; this is the one invoked after every carraige return.</p>
+
+	<p>Lines in <i>char.a6</i> begin with a single character to indicate
+	what the line carries:</p>
+	
+	<table border=1>
+		<tr><th>*					<td>indicates the beginning of a new
+										character set, and the end of the
+										previous one.
+		<tr><th>+					<td>equivalent to <i>.include</i>; includes
+										a previously defined character set into
+										the current definition.
+		<tr><th>#					<td>indicates the number of the next
+										character to follow. Note that <i>a6</i>
+										only supports 8-bit character sets.
+		<tr><th>// <i>comment</i>	<td>these comments are inline, and are
+										ignored by <i>a6</i> when loading the
+										file.  They can occur at any point on
+										the line.
+		<tr><th>(space)				<td>any line that begins with any form of
+										whitespace is a definition line.  Lines
+										may consist of one or more characters,
+										using the mnemonic definitions above.
+	</table>
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="a6c_files"></a>
+<h1>A6C files</h1>
+
+A6C files are the driving engine of A6.  They define the CPU in use.
+A .cpu directive is not required to use opcodes for the 6510 microprocessor; the 6510 definitions are loaded automatically if you try and write code without one.  However, if you do start your assembly file with one, then you'll need to load the 6510 cpu to use it, of course.  But safe to say, it doesn't sit around consuming memory if you never use it.
+So how do A6C files work?  Let's take the 6510.a6c file from the 0.5.0beta1 distribution as a guide:
+9.1 General settings
+; 6510.a6c
+;
+; A6 cpu source for MOS technologies 6510 processor
+;
+; use a6cc to compile
+
+; These are comments -- use them!
+; Note only semi-colon comments are supported.
+
+; File format is VERY rigid -- be careful! 
+This is a fairly standard header for the a6c files.  It's just comments.  Although normal source files support both semi-colons and double-forward-slash as comments, a6c files only use semi-colons.  This is for speed.  I was planning to do it, but now I've decided not to, especially now that table loading is written directly into A6 and not a separate program.
+Like A6's source files, lines in an a6c file are all separate commands.  Each command is a single character, and arguments on the line are separated by spaces.  Before we go any further, one caveat: forward references in a6c files are forbidden.  I'd advise you to follow the structure laid down in this page.
+N 6510 
+N defines the name of the CPU in question.  WARNING: A6 doesn't stitch all the arguments back together; if you enter "N Intel 80386", all A6 will get will be "Intel"; you need to use underscores!
+E l
+E states what byte order the CPU expects.  "I" or "L" specifies little-endian (such as used by Intel CPUs and the 6502), "B" or "M" specifies big-endian (PowerPC or Motorola 88K) and "P" specifies PDP-endian (though I'm not sure the PDP ordering is right yet; besides no PAL a6c file is in progress and I don't support those OR-type bitfield opcodes yet).   Incidentally, the E command ignores all but the first character; don't worry if you put "E little", a6cc will know what you mean.  (However, if it doesn'
+t know what you mean it will stop parsing the file there and then and bomb out.  Always a catch, eh?)
+= 0 0 ea 
+= is followed by three up to three arguments.  In actual fact, our example line is completely unnecessary, as it sets the values to their defaults.
+(1)the alignment AND position for the bytecode alignment.  On CPUs which require opcodes to be aligned to a word or dword boundary, this is the amount the program counter needs to be ANDed with to find the alignment.  On the 6510, where this isn't a problem, it's zero.  On (for example) the Motorola 68000, this would be 3.
+(2)the alignment OR value.  If you need to align to an odd-boundary, you'd set this to non-zero; for example, if a processor required that opcodes start on the second byte of each dword, the line would be = 3 1.  If that makes no sense whatsoever, don't worry - I had to read the source to remember, and I wrote the thing!
+(3)now this is easy - it's a one-byte no-op code.  On the 6510 this is 0xea.  Note that a6cc assumes all numbers are in hex, and it doesn't suffer $ or 0x prefixes gladly (there's a good reason for that, which escapes me at present).
+9.2 Address modes
+In the A6 model, each opcode (e.g. "lda" or "nop") has one or more possible addressing modes.
+Since A6 doesn't optimise the address modes (it would need to be done only once, but it would take time and slow down the loading of the files, perhaps quite a lot), you will need to do it in the a6c file.
+Ironically, this is an area where a human can optimise better than a computer, as a human will know which addressing modes will be used most often.  You will see, of course, that I have made a complete badger's arse of optimising this one:
+; ADDRESS MODES
+
+; A <name> <argument-size> <offset>
+; <name> max. 7 letters
+; <argument-size> 0, 8, 16, 24 or 32.
+; Prefix with:
+; r - relative
+; n - negative (2's complement) relative
+; <offset> Offset type
+; Prefix with:
+; nothing: append byte
+; +: add to last opcode byte
+; |: OR with last opcode byte
+;
+; Remember, address modes are checked in order,
+; so smaller sizes go first to ensure that they
+; win out over larger sizes for smaller argument sizes.
+A imm 8 +0
+A imm8 8 -8
+A indx 8 -8
+A indy 8 +8
+A zp 8 -4
+A zpx 8 +C
+A zpy 8 +C
+
+A abs 16 +4
+A absx 16 +14
+A absy 16 +10
+A absy2 16 +14
+A ind 16 +24
+
+A rel r8 +8
+
+A imp 0 +0
+A rega 0 +0 
+A takes three arguments: 
+(1)the name of the address mode, which must be no more than 7 characters (though there's no limit on what characters they can be (other than space), and it is case-sensitive).  They must be unique, but a6 doesn't check this (yet).  These names are not used internally by a6, once the file has been loaded; there's no way (as yet) to directly handle the type of file that used "LDAIM 32" instead of "LDA #32" (which assembler did that anyway?  Was it Pulse?).
+(2)The size of the argument to this address mode.  This must be 0, 8, 16, 24 or 32, and it's internally converted to a number of bytes.  I chose to do this to allow for other word sizes; e.g. for Intel 4004 or PDP support (with 4 and 9-bit bytes, respectively).
+Prefix this argument with an "r" to make it a relative instruction, which will be calculated from the byte after the end of the control (so to do an infinite loop on the 6510 you'd use "bcs *-2", although why you'd ever want to I have no idea.)
+Prefix this argument with an "n" to make it a negative-relative instruction (added for SSEM support).
+(3)The offset or OR byte(s).  This is prefixed by a plus or minus sign for simple addition or subtraction (which applies to all the bytes of the opcode, so be careful), or you can prefix with a vertical bar (|, ASCII 124), in order to OR the opcode.  There isn't really much of a penalty for using either.  You can also omit the prefix, and the bytes of the address mode will be output directly to the output stream directly after the opcode, and before the result of the evaluated expression. 
+You can have up to 32 address modes at present, although I may remove this limit at a later date if I feel the need.
+9.3 Match patterns
+Each possible address mode can match one or more match patterns.
+The expression part of the opcode supplied (e.g. "lda $1234,y") will match one match pattern, and one only.  They are checked in turn, and the first one that matches is used.  Therefore it's important to put ones such as "(*),y" before "*,y", otherwise the former will never be reached.
+Note that the patterns are checked at the beginning and end, not in the middle.  The "*" merely separates out the two halves, if there are any.
+; MATCH PATTERNS
+
+; M <match-string> <address-mode> [<address-mode> ...]
+; <match-string> Use * to indicate the actual expression
+; The beginning is checked verbatim, then
+; a strstr is done for the end.
+; Use '0' to match an empty expression.
+; Always check '*' last, otherwise it will
+; always win over anything you put below it.
+M (*,x) indx
+M (*),y indy
+M (*) ind
+M *,x absx zpx
+M *,y absy zpy absy2
+M #* imm imm8
+M a rega
+M 0 imp
+M * zp abs rel 
+M takes two or more arguments: 
+(1)The match pattern.  The expression is represented by the asterisk ("*") character; this extracted expression is passed to the expression parser.  Be careful: you can't have more than one expression in a line.  There's no warning; the second asterisk will be taken as a literal.  There can be no more than (as of 0.5.0beta1) no more than three characters before and after the asterisk (this will change). Note the line "M 0 imp", by the way: in the context of match patterns, the number zero specifies an empt
+y expression.
+(2)(and any others) Address modes to which this match pattern applies.  Provided they have been defined, you can specify them.  You can, of course, specify as many address modes as you have defined. 
+You can have up to 16 match patterns.
+Note, of course, that any address mode can be used with one or more match patterns, and vice versa.
+; OPCODES
+; O <opcode> <byte(s)> <address-mode> [<address-mode> ...]
+; <opcode> Name as used in source code,
+; e.g. mov, sta, sbc, etc...
+; <byte(s)> No spaces, in output order
+; (regardless of cpu-endian)
+;
+; Use O or : for a documented opcode.
+; Use U or $ for an undocumented opcode.
+O adc 69 abs absx absy imm indx indy zp zpx
+O and 29 abs absx absy imm indx indy zp zpx
+O asl A abs absx imp rega zp zpx
+O bcc 88 rel
+O bcs A8 rel
+O beq E8 rel
+O bit 28 abs zp
+O bmi 28 rel 
+O or : specifies a documented opcode, which is always available; U or $ specifies an undocumented opcode, which is only available when you use .undoc. These commands take three or more arguments:
+(1)The name of the opcode.  You're allowed up to 128 opcodes (at present), which must have unique names.  Note that you can't redefine an opcode after you've defined it once (although a6 won't warn you about this - yet).
+(2)The hex bytes, in output stream order.  Incidentally, leading zeroes are not superfluous here: 00E8 in this field won't produce the same output as E8.  These hex bytes will be modified by the address modes, where appropriate (e.g. +8 will add 8 to the first byte).
+(3)(and any others) The address modes applicable to this opcode.  You can, of course, specify as many address modes as you have already defined.  Note that the actual byte(s) for the opcode are generated from the base code, plus the offset (or OR with the OR byte); therefore, BMI's relative mode comes out as 0x30, rather than 0x28. 
+(Aside: It doesn't take Einstein to figure out that you can use this method to define long jumps, e.g.:
+A rel16 16 -28 3 4c
+M * zp abs rel rel16
+O bcs A8 rel rel16
+That ought to (given a following wind) automatically be equivalent to:
+BCC *+3
+JMP result_of_bcs
+whenever the magic 128-byte barrier gets overshot, thus avoiding the nasty "branch out of range" error.)
+
+<hr>
+<a name="errors"></a>
+<h1>Error messages</h1>
+
+<a name="amna"></a>
+<h2>Address mode not available</h2>
+
+	<p>When processing assembly source files, it indicates that <i>a6</i> was
+	able to resolve which addressing mode it ought to be using here, but it
+	isn't available on the specified opcode.</p>
+
+	<p>When processing an <i>a6c</i> file, this indicates that the file
+	contains a reference to an address mode that has not been defined.</p>
+
+<a name="interr"></a>
+<h2>Internal error</h2>
+
+	<p>If you see this one, drop me a line at the usual address,
+	<a href="mailto:sc@emudir.com">sc@emudir.com</a>.</p>
+
+<a href="err_invadr"></a>
+<h2>Invalid or unknown address mode</h2>
+
+	<p><i>a6</i> either cannot determing the address mode for this instruction,
+	or there is a syntax error.</p>
+
+	<p>If encountered while loading an <i>a6c</i> file, this indicates that the
+	name of the address mode requested for this opcode hasn't actually been
+	defined.</p>
+
+<a name="err_ltl"></a>
+<h2>Label too long</h2>
+
+	<p>Label names are limited to 31 chracters in source files; when
+	encountered in a source file, this is a warning and the label is truncated
+	to 31 characters.</p>
+
+	<p>If encountered when loading an <i>a6c</i> files, this indicates that the
+	opcode name is longer than the 7-character limit.</p>
+
+<a name="tmmm"></a>
+<h2>Too many match modes</h2>
+
+	<p>The <i>a6c</i> file being processed contains too many match
+	patterns.</p>
+
+	<p>This limit (at present) defaults to 16 (as of 0.5.0b1); this may extend
+	at a later date.</p>
+
+<a name="tmo"></a>
+<h2>Too many opcodes</h2>
+
+	<p>At present, cpu files can only define a maximum of 128 opcodes.  This
+	error indicates that a 129th opcode has been encountered.</p>
+
+	<p>This error is simply a manifestation of laziness, and will no doubt go
+	away in time if you ignore it for long enough...</p>
+
+<a name="err_unknowncs"></a>
+<h2>Unknown character set</h2>
+
+	<p>The named character set cannot be found in <i>char.a6</i>, or the file
+	cannot be found.</p>
+	
+	<p>See <a href="#files">the section on file</a> for details of location,
+	and the section on <a href="#char_a6_format">character set formats</a>
+	for more details on the format of the file.</p>
+
+10.1 Internal error
+If you see this one, get in touch with me: <sc@emudir.com>.
+10.2 File not found
+The file A6 was looking for it can't find.
+Note that a ".a6c" file is a CPU table, and the name is taken directly from the ".cpu" directive.  If you don't have the table in the current directory, or in /usr/share/a6 (or wherever the A6HOME environment variable points to, or wherever the compiled-in value of A6HOME points to) then you'll need to get it from somewhere.  The A6 distribution should contain a large selection of them in the "cpu" directory8.
+10.3 Unterminated string
+You started a string, but A6 couldn't find the end of it.  You can do that with a line like this:
+.text "Hello, world!
+10.4 Unknown directive
+Usually the cause of assembling a source file destined for a later version of A6 in an older one.  Or a spelling mistake.  Or trying to port source written for another assembler.
+See the earlier section on assembler directives to see the list of supported directives.
+10.5 Junk (maybe whitespace) after string
+A6 has found what it thinks is the end of a string, but then there was extra stuff after it!
+You can cause this error like this:
+.text 'Look at Jennifer's dress, Brian'
+A6 will (incorrectly) assume that the apostrophe in "Jennifer's" is the end of the string.
+10.6 Second .org encountered
+Once you start assembling from one place, you can't re-start from another.  If you need to skip some area, reassign the * variable.
+This is pedantry really, but it's mainly intended to warn you in case you've included a file you shouldn't have.  Although if you never start a file with ".org" then it's about as much use as a chocolate teapot.
+10.7 Value out of range
+For example, you're trying to LDA #257; it's a value too big (or small) for the addressing mode.
+Note that A6 always presumes that negative numbers are handled by two's complement9 and not only can, but should be, automatically interchangeable.  Thus, the range of an 8-bit value in A6 is -128 to 255, not -127 to 128 or 0 to 255, as you'd expect.
+10.8 Unknown character set
+The named character set is not built into A6.  See the .cset directive for further details
+In future versions (see the roadmap), this will denote the absence of a .a6s file, and at that point the built-in character sets will start to produce this error if the .a6s files can't be found.
+10.9 Unknown opcode
+The opcode name suggested hasn't been found in the loaded opcode table.
+Make sure your .cpu declaration is correct.  If there isn't one, are you actually writing 6510 code?  If not, you will need a .cpu directive before the first line of code.
+        "invalid or unknown address mode",
+        "illegal character to start label",
+        "division by zero",
+        "object code overflow",
+        "label is not a variable",
+        "cannot close file",
+        "reserved label",
+        "nesting too deep",
+        "illegal character in expression",
+        "label not defined",
+        "stack empty",
+        "label too long",
+        "too many files",
+        "address mode not available",
+        "file is not a valid CPU file",
+        "out of memory",
+        "bad endianism (use i[ntel], m[otorola], b[ig], l[ittle] or p[dp])",
+        "maximum number of address modes in use"
+
+11 Known bugs
+
+12 Version history
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="roadmap"></a>
+<h1>Development roadmap</h1>
+
+<p>Version numbers are when I suspect I will get around to doing things; they're not
+set in stone.  I might decide one night that one feature is more fun than another
+and promote it up the "to do" list.  (Actually, I did just do that with the
+character set support...)</p>
+
+<h2>Version 0.5</h2>
+<ul>
+	<li>Full debug of all functionality in this manual<br>
+</ul>
+
+<h2>Version 0.6</h2>
+<ul>
+	<li>Macro support<br>
+	<li><strike>RFC-1345 style character set support (?)</strike><br>
+	<li>Output to Genius OC+ hex (-fg)<br>
+	<li>Support for opcode-adrmode combinations (e.g. "ldaim" instead of "lda #")?
+		(Will this will need to be done at cpu load time? Should it be optional?)<br>
+</ul>
+
+<h2>Version 0.7</h2>
+<ul>
+	<li>Support for 64-bit processors<br>
+	<li>Support for 4-bit processors<br>
+	<li>Support for Intex hex (-fi)<br>
+	<li>Support for Motorola hex (-fm)<br>
+	<li>Output as DOS debug script (-fd???)<br>
+</ul>
+
+<h2>Post-version 0.7</h2>
+<ul>
+	<li>Drop A6C format in favour of assembler directives to do the same thing???
+		(why aren't I doing this already???)<br>
+	<li>Support for arbitrarily definable output formats, through assembler
+		directives.<br>
+	<li>Support for 9-bit byte architectures (e.g. PDP-11)<br>
+</ul>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="thanx"></a>
+<h1>Thanks and Acknowledgements</h1>
+
+<p>Thanks to Case for prodding me to start writing this again.</p>
+
+<p>Full list of contributors:</p>
+
+<ul>
+	<li>Simon Collis (project lead)<br>
+	<li>Steven Toth (advice)<br>
+</ul>
+
+<!---------------------------------------------------------------------------->
+<hr>
+<a name="gfdl"></a>
+<h1>GNU Free Documentation License</h1>
+
+<p>This documentation is distributed under the GNU Free Documentation License,
+a copy of which is included here:</p>
+
+<h2 align="center">GNU Free Documentation License<br>
+Version 1.2, November 2002</h2>
+
+<p>
+ Copyright (C) 2000,2001,2002  Free Software Foundation, Inc.
+     51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+</p>
+
+<h2>0. PREAMBLE</h2>
+
+<p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document "free" in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially.
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.</p>
+
+<p>This License is a kind of "copyleft", which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.</p>
+
+<p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.</p>
+
+
+<h2>1. APPLICABILITY AND DEFINITIONS</h2>
+
+<p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The "Document", below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as "you".  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.</p>
+
+<p>A "Modified Version" of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.</p>
+
+<p>A "Secondary Section" is a named appendix or a front-matter section of
+the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall subject
+(or to related matters) and contains nothing that could fall directly
+within that overall subject.  (Thus, if the Document is in part a
+textbook of mathematics, a Secondary Section may not explain any
+mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.</p>
+
+<p>The "Invariant Sections" are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.</p>
+
+<p>The "Cover Texts" are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.</p>
+
+<p>A "Transparent" copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent.
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not "Transparent" is called "Opaque".</p>
+
+<p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input format, SGML
+or XML using a publicly available DTD, and standard-conforming simple
+HTML, PostScript or PDF designed for human modification.  Examples of
+transparent image formats include PNG, XCF and JPG.  Opaque formats
+include proprietary formats that can be read and edited only by
+proprietary word processors, SGML or XML for which the DTD and/or
+processing tools are not generally available, and the
+machine-generated HTML, PostScript or PDF produced by some word
+processors for output purposes only.</p>
+
+<p>The "Title Page" means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, "Title Page" means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.</p>
+
+<p>A section "Entitled XYZ" means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as "Acknowledgements",
+"Dedications", "Endorsements", or "History".)  To "Preserve the Title"
+of such a section when you modify the Document means that it remains a
+section "Entitled XYZ" according to this definition.</p>
+
+<p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.</p>
+
+
+<h2>2. VERBATIM COPYING</h2>
+
+<p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.</p>
+
+<p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.</p>
+
+
+<h2>3. COPYING IN QUANTITY</h2>
+
+<p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition.
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.</p>
+
+<p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.</p>
+
+<p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material.
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.</p>
+
+<p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.</p>
+
+
+<h2>4. MODIFICATIONS</h2>
+
+<p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:</p>
+
+<p><b>A.</b> Use in the Title Page (and on the covers, if any) a title distinct
+   from that of the Document, and from those of previous versions
+   (which should, if there were any, be listed in the History section
+   of the Document).  You may use the same title as a previous version
+   if the original publisher of that version gives permission.</p>
+
+<p><b>B.</b> List on the Title Page, as authors, one or more persons or entities
+   responsible for authorship of the modifications in the Modified
+   Version, together with at least five of the principal authors of the
+   Document (all of its principal authors, if it has fewer than five),
+   unless they release you from this requirement.</p>
+
+<p><b>C.</b> State on the Title page the name of the publisher of the
+   Modified Version, as the publisher.</p>
+
+<p><b>D.</b> Preserve all the copyright notices of the Document.</p>
+
+<p><b>E.</b> Add an appropriate copyright notice for your modifications
+   adjacent to the other copyright notices.</p>
+
+<p><b>F.</b> Include, immediately after the copyright notices, a license notice
+   giving the public permission to use the Modified Version under the
+   terms of this License, in the form shown in the Addendum below.</p>
+
+<p><b>G.</b> Preserve in that license notice the full lists of Invariant Sections
+   and required Cover Texts given in the Document's license notice.</p>
+
+<p><b>H.</b> Include an unaltered copy of this License.</p>
+
+<p><b>I.</b> Preserve the section Entitled "History", Preserve its Title, and add
+   to it an item stating at least the title, year, new authors, and
+   publisher of the Modified Version as given on the Title Page.  If
+   there is no section Entitled "History" in the Document, create one
+   stating the title, year, authors, and publisher of the Document as
+   given on its Title Page, then add an item describing the Modified
+   Version as stated in the previous sentence.</p>
+
+<p><b>J.</b> Preserve the network location, if any, given in the Document for
+   public access to a Transparent copy of the Document, and likewise
+   the network locations given in the Document for previous versions
+   it was based on.  These may be placed in the "History" section.
+   You may omit a network location for a work that was published at
+   least four years before the Document itself, or if the original
+   publisher of the version it refers to gives permission.</p>
+
+<p><b>K.</b> For any section Entitled "Acknowledgements" or "Dedications",
+   Preserve the Title of the section, and preserve in the section all
+   the substance and tone of each of the contributor acknowledgements
+   and/or dedications given therein.</p>
+
+<p><b>L.</b> Preserve all the Invariant Sections of the Document,
+   unaltered in their text and in their titles.  Section numbers
+   or the equivalent are not considered part of the section titles.</p>
+
+<p><b>M.</b> Delete any section Entitled "Endorsements".  Such a section
+   may not be included in the Modified Version.</p>
+
+<p><b>N.</b> Do not retitle any existing section to be Entitled "Endorsements"
+   or to conflict in title with any Invariant Section.</p>
+
+<p><b>O.</b> Preserve any Warranty Disclaimers.</p>
+
+<p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice.
+These titles must be distinct from any other section titles.</p>
+
+<p>You may add a section Entitled "Endorsements", provided it contains
+nothing but endorsements of your Modified Version by various
+parties--for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.</p>
+
+<p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.</p>
+
+<p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.</p>
+
+
+<h2>5. COMBINING DOCUMENTS</h2>
+
+<p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.</p>
+
+<p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number.
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.</p>
+
+<p>In the combination, you must combine any sections Entitled "History"
+in the various original documents, forming one section Entitled
+"History"; likewise combine any sections Entitled "Acknowledgements",
+and any sections Entitled "Dedications".  You must delete all sections
+Entitled "Endorsements".</p>
+
+
+<h2>6. COLLECTIONS OF DOCUMENTS</h2>
+
+<p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.</p>
+
+<p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.</p>
+
+
+<h2>7. AGGREGATION WITH INDEPENDENT WORKS</h2>
+
+<p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an "aggregate" if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit.
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.</p>
+
+<p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form.
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.</p>
+
+
+<h2>8. TRANSLATION</h2>
+
+<p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4.
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.</p>
+
+<p>If a section in the Document is Entitled "Acknowledgements",
+"Dedications", or "History", the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.</p>
+
+
+<h2>9. TERMINATION</h2>
+
+<p>You may not copy, modify, sublicense, or distribute the Document except
+as expressly provided for under this License.  Any other attempt to
+copy, modify, sublicense or distribute the Document is void, and will
+automatically terminate your rights under this License.  However,
+parties who have received copies, or rights, from you under this
+License will not have their licenses terminated so long as such
+parties remain in full compliance.</p>
+
+
+<h2>10. FUTURE REVISIONS OF THIS LICENSE</h2>
+
+<p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.</p>
+
+<p>Each version of the License is given a distinguishing version number.
+If the Document specifies that a particular numbered version of this
+License "or any later version" applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.</p>
+
+
+<h2>ADDENDUM: How to use this License for your documents</h2>
+
+<p>To use this License in a document you have written, include a copy of the
+License in the document and put the following copyright and license notices
+just after the title page:</p>
+
+<pre>    Copyright (c)  YEAR  YOUR NAME.
+    Permission is granted to copy, distribute and/or modify this document
+    under the terms of the GNU Free Documentation License, Version 1.2
+    or any later version published by the Free Software Foundation;
+    with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+    A copy of the license is included in the section entitled "GNU
+    Free Documentation License".
+</pre>
+
+<p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the "with...Texts." line with this:</p>
+
+<pre>    with the Invariant Sections being LIST THEIR TITLES, with the
+    Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST. 
+</pre>
+
+<p>If you have Invariant Sections without Cover Texts, or some other combination
+of the three, merge those two alternatives to suit the situation.</p>
+
+<p>If your document contains nontrivial examples of program code, we recommend
+releasing these examples in parallel under your choice of free software license,
+such as the GNU General Public License, to permit their use in free software.</p>
+
+<hr>
+<a name="index"></a>
+
+<h1>Index</h1>
+
+<h2>A</h2>
+<ul>
+	<li><a href="#a6_exe">a6.exe</a></br>
+	<li>a6c files
+	<ul>
+		<li><a href="#a6c_where">location of</a><br>
+	</ul>
+	<li><a href="d_add">.add</a> (assembler directive)<br>
+	<li><a href="d_align">.align</a> (assembler directive)<br>
+	<li><a href="#amna">Address mode not available</a> (error)<br>
+	<li><a href="#comp_amiga">Amiga, compiling on</a><br>
+	<li><a href="#srcform">.asm files</a><br>
+</ul>
+
+<h2>B</h2>
+<ul>
+	<li><a href="#comp_beos">BeOS, compiling on</a><br>
+	<li><a href="d_block">.block</a> (assembler directive)<br>
+	<li><a href="#d_byte">.byte</a> (assembler directive)<br>
+</ul>
+
+<h2>C</h2>
+<ul>
+	<li><a href="#d_cpu">.cpu</a> (assembler directive)<br>
+</ul>
+
+<h2>D</h2>
+<ul>
+	<li><a href="#cmd_d">-d</a>, <a href="#cmd_d">--dots-optional</a>
+		(command-line option)<br>
+	<li><a href="#comp_dos">DOS, compiling on</a><br>
+	<li><a href="#radix">duodecimal</a><br>
+</ul>
+
+<h2>E</h2>
+<ul>
+	<li><a href="d_echo">.echo</a> (assembler directive)<br>
+	<li><a href="d_else">.else</a> (assembler directive)<br>
+	<li><a href="d_fi">.endif</a> (assembler directive)<br>
+	<li><a href="d_endloc">.endloc</a> (assembler directive)<br>
+	<li><a href="d_eor">.eor</a> (assembler directive)<br>
+	<li><a href="d_equ">.equ</a> (assembler directive)<br>
+	<li><a href="#expr">Expressions</a><br>
+</ul>
+
+<h2>F</h2>
+<ul>
+	<li><a href="d_fi">.fi</a> (assembler directive)<br>
+	<li><a href="d_file">.file</a> (assembler directive)<br>
+	<li><a href="#cmd_f0">-f0</a>, <a href="#cmd_f0">--format-p00</a>
+		(command-line option)<br>
+	<li><a href="#cmd_fb">-fb</a>, <a href="#cmd_fb">--format-bin</a>
+		(command-line option)<br>
+	<li><a href="#cmd_fp">-fp</a>, <a href="#cmd_fp">--format-prg</a>
+		(command-line option)<br>
+</ul>
+
+<h2>G</h2>
+<ul>
+	<li><a href="#gfdl">GNU Free Documentation Licence</a><br>
+</ul>
+
+<h2>H</h2>
+<ul>
+	<li><a href="#radix">hexadecimal</a><br>
+</ul>
+
+<h2>I</h2>
+<ul>
+	<li><a href="d_incbin">.ibin</a> (assembler directive)<br>
+	<li><a href="d_if">.if</a> (assembler directive)<br>
+	<li><a href="d_ifequ">.ifequ</a> (assembler directive)<br>
+	<li><a href="d_ifeven">.ifeven</a> (assembler directive)<br>
+	<li><a href="d_ifmi">.ifmi</a> (assembler directive)<br>
+	<li><a href="d_if">.ifneq</a> (assembler directive)<br>
+	<li><a href="d_ifodd">.ifodd</a> (assembler directive)<br>
+	<li><a href="d_ifpl">.ifpl</a> (assembler directive)<br>
+	<li><a href="d_ifpl">.ifpos</a> (assembler directive)<br>
+	<li><a href="d_inc">.inc</a> (assembler directive)<br>
+	<li><a href="d_incbin">.incbin</a> (assembler directive)<br>
+	<li><a href="d_inc">.include</a> (assembler directive)<br>
+	<li><a href="d_incp00">.incp00</a> (assembler directive)<br>
+	<li><a href="d_incprg">.incprg</a> (assembler directive)<br>
+	<li><a href="#interr">Internal error</a> (error)<br>
+	<li><a href="d_incp00">.ip00</a> (assembler directive)<br>
+	<li><a href="d_incprg">.iprg</a> (assembler directive)<br>
+</ul>
+
+<h2>L</h2>
+<ul>
+	<li><a href="#err_ltl">Label too long</a> (error)<br>
+	<li><a href="d_endloc">.lacol</a> (assembler directive)<br>
+	<li><a href="#comp_linux">Linux, compiling on</a><br>
+	<li><a href="d_inc">.lib</a> (assembler directive)<br>
+	<li><a href="d_long">.long</a> (assembler directive)<br>
+</ul>
+
+<h2>M</h2>
+<ul>
+	<li><a href="#comp_minix">Minix, compiling on</a><br>
+</ul>
+
+<h2>N</h2>
+<ul>
+	<li><a href="d_noundoc">.noundoc</a> (assembler directive)<br>
+	<li><a href="d_null">.null</a> (assembler directive)<br>
+</ul>
+
+<h2>O</h2>
+<ul>
+	<li><a href="#radix">octal</a><br>
+	<li><a href="#comp_os2">OS/2, compiling on</a><br>
+</ul>
+
+<h2>P</h2>
+<ul>
+	<li><a href="#cmd_f0">P00 files</a><br>
+	<li><a href="d_block">.pad</a> (assembler directive)<br>
+	<li><a href="#cmd_f0">PC64 emulator</a><br>
+	<li><a href="#cmd_fp">PRG files</a><br>
+</ul>
+
+<h2>S</h2>
+<ul>
+	<li><a href="#srcform">Source files, format of</a><br>
+</ul>
+
+<h2>T</h2>
+<ul>
+	<li><a href="#d_byte">.txt</a> (assembler directive)<br>
+	<li><a href="#tmmm">Too many match modes</a> (error)<br>
+	<li><a href="#tmo">Too many opcodes</a> (error)<br>
+</ul>
+
+<h2>U</h2>
+<ul>
+	<li><a href="#err_unknowncs">Unknown character set</a> (error message)<br>
+	<li><a href="#comp_unix">Unix, compiling on</a><br>
+</ul>

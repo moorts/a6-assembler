@@ -1,0 +1,16 @@
+Version 0.5.0 (Ignatz)
+ - minimum licence changed to GPL 3
+ - opcodes are now case insensitive
+ - fixed jmp(*) (although this bug may not have been in 0.4.4...)
+ - error message output changed to be a bit more like a standard C compiler
+	error message now
+ - moving from C to C++ (slowly)
+ - changing brace style from 1TBS to C#/.Net style (personal bias, tough bananas
+	if you don't like it)
+ - added new directives for more Laser Genius compatability: .text, etc...
+ - all directives now have a three letter abbreviation, where this would
+	not be ambiguous (e.g. .end is NOT a synonym for .endif)
+ - directives are now case-aloof (as opposed to case-sensitive. Well, I think
+	it sounds better, anyway...)
+ - now including the old manual, not sure what to do about documentation
+	any more...
